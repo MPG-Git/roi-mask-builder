@@ -1,0 +1,27 @@
+# MATLAB
+*.asv
+*.m~
+*.mex*
+*.mat
+*.fig
+*.mdl
+*.slx
+*.autosave
+.DS_Store
+
+# OS / editor
+Thumbs.db
+ehthumbs.db
+Icon?
+._*
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# Data / outputs
+*.nii.gz
+tmp_roi_masks_for_viz/
+*.json
+*.log
+*.tmp

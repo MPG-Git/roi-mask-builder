@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+message: "If you use this tool, please cite this repository."
+title: "ROI Mask Builder (MATLAB + SPM12)"
+authors:
+  - family-names: Gunn
+    given-names: Matthew P.
+license: MIT
+version: 0.1.0
+date-released: 2025-11-06
