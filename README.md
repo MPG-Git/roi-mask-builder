@@ -2,11 +2,11 @@
 A tiny, UI-driven MATLAB tool to build **combined binary ROI masks** from an **indexed atlas NIfTI** (e.g., AAL3)
 
 ## Authors
-- **Matthew P. Gunn, PhD**
+**Matthew P. Gunn, PhD**
 - Creator & Lead Developer  
 - Designed and built the tool to streamline mask generation for collaborators and clinical partners.
 
-- **Dominic Joseph Grisafe, MD**  
+**Dominic Joseph Grisafe, MD**  
 - Co-Creator & Clinical Contributor  
 - Provided the motivating use-case and domain insights that led to the development of this tool, ensuring its relevance for psychiatry and neuroimaging workflows.
 
