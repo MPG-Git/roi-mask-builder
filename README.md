@@ -6,7 +6,7 @@ A tiny, UI-driven MATLAB tool to build **combined binary ROI masks** from an **i
 - Creator & Lead Developer  
 - Designed and built the tool to streamline mask generation for collaborators and clinical partners.
 
-**Dominic Joseph Grisafe, MD**  
+**Dominic J. Grisafe, MD PhD**  
 - Co-Creator & Clinical Contributor  
 - Provided the motivating use-case and domain insights that led to the development of this tool, ensuring its relevance for psychiatry and neuroimaging workflows.
 
