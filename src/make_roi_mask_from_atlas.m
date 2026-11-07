@@ -16,7 +16,7 @@ function make_roi_mask_from_atlas()
 clc; fprintf('=== ROI Mask Builder (Atlas -> Binary Mask) ===\n');
 
 % --- Check SPM ---
-needFns = {'spm_vol','spm_read_vols','spm_write_vol','spm_reslice','spm_orthviews'};
+needFns = {'spm_vol','spm_read_vols','spm_write_vol','spm_reslice'};
 for k = 1:numel(needFns)
     if exist(needFns{k}, 'file') ~= 2
         error('Required SPM function "%s" not found. Please add SPM12 to your MATLAB path.', needFns{k});
@@ -67,77 +67,9 @@ if isequal(outFile,0); disp('Canceled.'); return; end
 outFQ = fullfile(outPath, outFile);
 fprintf('Output: %s\n', outFQ);
 
-% --- 6) Load reference header ---
-V_ref = spm_vol(refFQ);
-
-% --- 7) Prepare atlas in reference space (reslice if needed) ---
-V_atlas = spm_vol(atlasFQ);
-atlasToUse = atlasFQ;
-tempResliced = '';
-if ~same_space_(V_atlas, V_ref)
-    fprintf('Reslicing atlas -> reference (nearest-neighbor)...\n');
-    flags = struct('interp', 0, 'wrap', [0 0 0], 'mask', 0, 'which', 1, 'mean', 0);
-    spm_reslice({refFQ, atlasFQ}, flags);
-    [~, aName, aExt] = fileparts(atlasFQ);
-    if strcmpi(aExt,'.gz'), aName = erase(aName,'.nii'); end
-    tempResliced = fullfile(atlasPath, ['r' aName '.nii']);
-    if ~exist(tempResliced,'file'), error('Resliced file not found: %s', tempResliced); end
-    atlasToUse = tempResliced;
-    V_atlas = spm_vol(atlasToUse);
-else
-    fprintf('Atlas already matches reference space.\n');
-end
-
-% --- 8) Read atlas & build combined mask ---
-atlasData = spm_read_vols(V_atlas);
-atlasData = round(atlasData);
-mask = uint8(ismember(atlasData, selIdx));
-
-% --- 9) Save combined mask ---
-V_out = V_ref;
-V_out.fname = outFQ;
-V_out.descrip = sprintf('Combined mask from atlas: %s', atlasFile);
-V_out.dt = [2 0]; % uint8
-spm_write_vol(V_out, mask);
-fprintf('✅ Wrote mask: %s\n', outFQ);
-
-% --- 10) Write JSON provenance ---
-meta.atlas_file      = atlasFQ;
-meta.labels_file     = labelFQ;
-meta.reference_file  = refFQ;
-meta.output_file     = outFQ;
-meta.selected_indices = selIdx(:).';
-meta.selected_names   = selNames(:).';
-meta.timestamp       = datestr(now, 30);
-jsonFQ = fullfile(outPath, replace(outFile, '.nii', '.json'));
-write_json_(jsonFQ, meta);
-fprintf('📝 Wrote metadata: %s\n', jsonFQ);
-
-% % --- 11) Visualization --- Do not work
-% try
-%     % Fig 1: Combined mask overlay
-%     show_combined_overlay_(refFQ, outFQ, selNames);
-% 
-%     % Fig 2: Per-ROI overlays (up to 12 at once)
-%     maxOverlays = 12;
-%     if numel(selIdx) > maxOverlays
-%         warnmsg = sprintf(['Selected %d ROIs; showing first %d as colored overlays.\n' ...
-%                            'Tip: run again with a subset to inspect others.'], ...
-%                            numel(selIdx), maxOverlays);
-%         warning(warnmsg);
-%     end
-%     show_per_roi_overlays_(refFQ, atlasData, V_ref, selIdx, selNames, outPath, min(numel(selIdx), maxOverlays));
-% catch ME
-%     warning('Visualization step failed: %s', ME.message);
-% end
-
-% --- 12) Cleanup temp resliced atlas (not the temp ROI masks used for viz) ---
-if ~isempty(tempResliced) && exist(tempResliced,'file')
-    delete(tempResliced);
-    fprintf('Removed temp resliced atlas: %s\n', tempResliced);
-end
-
-fprintf('\nDone.\n');
+% Shared, testable implementation; temporary files never touch the atlas folder.
+meta = build_roi_mask(atlasFQ, labelFQ, selIdx, outFQ, refFQ);
+fprintf('Wrote %d voxels and JSON metadata to %s\n', meta.voxel_count, outFQ);
 
 end % main
 
