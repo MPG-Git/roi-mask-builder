@@ -1,0 +1,5 @@
+Metric,Value,AbsTolerance
+VoxelCount,8,0
+XFirst,1,0
+XLast,2,0
+AffineXTranslation,1,0
