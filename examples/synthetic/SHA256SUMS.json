@@ -1,0 +1,9 @@
+{
+  "data/atlas.nii": "64414230bf1cf136f06f2bb1467d9acc141c7fc45aaf61d4d5e882ff9d5e477c",
+  "data/atlas.nii.gz": "6fba5a452dd90facb02342740f7c1fc733f964482f12c76d6be748dde86059cd",
+  "data/labels.txt": "d88c59f01b629473d0faa9d58584f4282ed231d4416d13abff224a59e70ac5eb",
+  "data/reference_shifted.nii": "4f751975171f724d91423aa5c49f9b5a12981ed9fa9595294d9ccd40958cc4b3",
+  "expected/mask_preview.png": "46474f5413a45528be91dcd44bd44179a792892948ffdc1aecf391ec52f0e6a9",
+  "expected/metrics.csv": "b9817a886be318c51f539deaf83f2e4436627f7b6f9128cec9b73b3f9a9d0a1d",
+  "expected/region_one_mask.nii": "1a11a2c86e489931292f4efaa7bf094bddba93d7e72f3325384d5af930502da1"
+}

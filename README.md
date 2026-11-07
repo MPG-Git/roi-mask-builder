@@ -1,6 +1,33 @@
 # roi-mask-builder
 A tiny, UI-driven MATLAB tool to build **combined binary ROI masks** from an **indexed atlas NIfTI** (e.g., AAL3)
 
+## Setup and use
+
+This is a standalone MATLAB/SPM tool, not an EEGLAB plugin. Install the
+[full SPM12 distribution](https://github.com/spm/spm12), then run:
+
+```matlab
+addpath('/path/to/spm12');
+addpath('/path/to/roi-mask-builder/src');
+make_roi_mask_from_atlas;
+```
+
+Choose an indexed atlas, its label file, the ROI names, an optional reference
+image, and a separate output `.nii` file. Label line 1 must describe voxel
+value 1, line 2 value 2, and so on; sparse atlases need placeholder lines for
+unused indices. A probability atlas is not supported. Reference resampling
+uses nearest-neighbor interpolation and assumes both images already share
+the same world-coordinate system; it does not perform anatomical registration.
+
+The output is a binary NIfTI plus JSON provenance. Compressed inputs are
+unpacked in a temporary directory. Visualization overlays remain unavailable.
+Batch use is also supported:
+
+```matlab
+meta = build_roi_mask('atlas.nii.gz','labels.txt',[1 2],'mask.nii','reference.nii');
+r = runtests('/path/to/roi-mask-builder/tests'); assertSuccess(r);
+```
+
 ## Authors
 **Matthew P. Gunn, PhD**
 - Creator & Lead Developer  
@@ -12,3 +39,10 @@ A tiny, UI-driven MATLAB tool to build **combined binary ROI masks** from an **i
 
 ## Citation
 Gunn, M. P., & Grisafe, D. J. (2025). *roi-mask-builder: A MATLAB tool for generating combined binary ROI masks from indexed atlas NIfTI files.* GitHub. https://github.com/MPG-Git/roi-mask-builder
+
+## Downloadable synthetic example
+
+[Run the bundled synthetic example](examples/synthetic/README.md) to check your setup against
+included reference outputs. It contains actual input files, a one-command runner,
+expected tables/plots, and numerical comparisons that report PASS or a mismatch.
+The example guide links to the main-branch ZIP, including the readiness fixes.
